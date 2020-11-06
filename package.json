@@ -7,10 +7,18 @@
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ resardis/testnet2",
     "create-local": "graph create --node http://localhost:8020/ resardis/testnet2",
     "remove-local": "graph remove --node http://localhost:8020/ resardis/testnet2",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 resardis/testnet2"
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 resardis/testnet2",
+    "lint:ts": "prettier --check '**/*.[jt]s'; eslint .",
+    "lint:ts:fix": "prettier --write '**/*.[jt]s'; eslint . --fix"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.18.0",
-    "@graphprotocol/graph-ts": "0.18.0"
+    "@graphprotocol/graph-ts": "0.18.0",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.6.1",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "prettier": "^2.1.2",
+    "typescript": "^4.0.3"
   }
 }
