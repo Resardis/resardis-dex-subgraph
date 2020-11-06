@@ -103,3 +103,51 @@ type OrderFilled @entity {
   offerID: BigInt!
 }
 
+type ActiveOffer @entity {
+  id: ID!
+  offerID: BigInt!
+  pair: Bytes!
+  maker: Bytes!
+  payGem: Bytes!
+  buyGem: Bytes!
+  payAmt: BigInt!
+  buyAmt: BigInt!
+  timestamp: BigInt!
+  offerType: Int!
+}
+
+type PairHourData @entity {
+    id: ID!
+    startUnix: BigInt! # unix timestamp for start of hour
+    payGem: Bytes!
+    buyGem: Bytes!
+    payAmt: BigInt!
+    buyAmt: BigInt!
+    minPayOverBuy: BigDecimal!
+    minBuyOverPay: BigDecimal!
+    maxPayOverBuy: BigDecimal!
+    maxBuyOverPay: BigDecimal!
+    openPayOverBuy: BigDecimal!
+    openBuyOverPay: BigDecimal!
+    closePayOverBuy: BigDecimal!
+    closeBuyOverPay: BigDecimal!
+    tradeCount: BigInt!
+}
+
+type PairDayData @entity {
+    id: ID!
+    startUnix: BigInt!
+    payGem: Bytes!
+    buyGem: Bytes!
+    payAmt: BigInt!
+    buyAmt: BigInt!
+    minPayOverBuy: BigDecimal!
+    minBuyOverPay: BigDecimal!
+    maxPayOverBuy: BigDecimal!
+    maxBuyOverPay: BigDecimal!
+    openPayOverBuy: BigDecimal!
+    openBuyOverPay: BigDecimal!
+    closePayOverBuy: BigDecimal!
+    closeBuyOverPay: BigDecimal!
+    tradeCount: BigInt!
+}
