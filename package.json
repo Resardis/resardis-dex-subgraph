@@ -9,7 +9,9 @@
     "remove-local": "graph remove --node http://localhost:8020/ resardis/testnet2",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 resardis/testnet2",
     "lint:ts": "prettier --check '**/*.[jt]s'; eslint .",
-    "lint:ts:fix": "prettier --write '**/*.[jt]s'; eslint . --fix"
+    "lint:ts:fix": "prettier --write '**/*.[jt]s'; eslint . --fix",
+    "lint:graphql": "prettier --check '**/*.graphql'",
+    "lint:graphql:fix": "prettier --write '**/*.graphql'"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.18.0",
