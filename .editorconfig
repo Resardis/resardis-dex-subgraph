@@ -14,9 +14,9 @@ trim_trailing_whitespace = true
 [*.sol]
 max_line_length = 99
 
-[*.js, *.ts]
+[*.js, *.ts, *.graphql, *.yaml]
 indent_size = 2
-max_line_length = 120
+max_line_length = 99
 
 # The JSON files contain newlines inconsistently
 [*.json]
