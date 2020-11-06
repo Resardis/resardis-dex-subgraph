@@ -12,8 +12,8 @@
     "lint:ts:fix": "prettier --write '**/*.[jt]s'; eslint . --fix"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.18.0",
-    "@graphprotocol/graph-ts": "0.18.0",
+    "@graphprotocol/graph-cli": "^0.18.0",
+    "@graphprotocol/graph-ts": "^0.18.1",
     "@typescript-eslint/eslint-plugin": "^4.6.1",
     "@typescript-eslint/parser": "^4.6.1",
     "eslint": "^7.12.1",
