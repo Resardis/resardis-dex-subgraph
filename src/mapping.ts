@@ -1,6 +1,4 @@
-// import { Bytes, BigInt, Address } from "@graphprotocol/graph-ts"
 import {
-  // Contract,
   LogDeposit,
   LogItemUpdate,
   LogKill,
@@ -16,89 +14,38 @@ import {
   LogOrderFilled,
   LogOrderStatus,
 } from "../generated/Contract/Contract"
-import { Deposit } from "../generated/schema"
-import { ItemUpdate } from "../generated/schema"
-import { Kill } from "../generated/schema"
-import { Make } from "../generated/schema"
-import { MinSell } from "../generated/schema"
-import { OfferType } from "../generated/schema"
-import { SetAuthority } from "../generated/schema"
-import { SetOwner } from "../generated/schema"
-import { SortedOffer } from "../generated/schema"
-import { Take } from "../generated/schema"
-import { Trade } from "../generated/schema"
-import { Withdraw } from "../generated/schema"
-import { OrderFilled } from "../generated/schema"
-import { OrderStatus } from "../generated/schema"
-import { ActiveOffer } from "../generated/schema"
-import { PairHourData, PairDayData } from "../generated/schema"
 
+import {
+  Deposit,
+  ItemUpdate,
+  Kill,
+  Make,
+  MinSell,
+  OfferType,
+  SetAuthority,
+  SetOwner,
+  SortedOffer,
+  Take,
+  Trade,
+  Withdraw,
+  OrderFilled,
+  OrderStatus,
+  ActiveOffer,
+  PairHourData,
+  PairDayData,
+} from "../generated/schema"
 
-import { store } from '@graphprotocol/graph-ts'
-import { ethereum } from '@graphprotocol/graph-ts'
-import { BigInt, BigDecimal } from '@graphprotocol/graph-ts'
+import { store, BigInt, BigDecimal } from "@graphprotocol/graph-ts"
 
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.authority(...)
-  // - contract.balanceInUse(...)
-  // - contract.balanceOf(...)
-  // - contract.best(...)
-  // - contract.buyAllAmount(...)
-  // - contract.cancel(...)
-  // - contract.depositWithdrawHistory(...)
-  // - contract.dust(...)
-  // - contract.dustId(...)
-  // - contract.getBestOffer(...)
-  // - contract.getBetterOffer(...)
-  // - contract.getBuyAmount(...)
-  // - contract.getIdIndexProcessed(...)
-  // - contract.getMinSell(...)
-  // - contract.getOffer(...)
-  // - contract.getOfferCount(...)
-  // - contract.getOwner(...)
-  // - contract.getPayAmount(...)
-  // - contract.getWorseOffer(...)
-  // - contract.isActive(...)
-  // - contract.lastOfferId(...)
-  // - contract.lastOffersHistoryIndex(...)
-  // - contract.offer(...)
-  // - contract.offerTypes(...)
-  // - contract.offers(...)
-  // - contract.offersHistory(...)
-  // - contract.offersHistoryIndices(...)
-  // - contract.owner(...)
-  // - contract.rank(...)
-  // - contract.sellAllAmount(...)
-  // - contract.setMinSell(...)
-  // - contract.span(...)
-  // - contract.tokens(...)
-  // - contract.tokensInUse(...)
-
-const ZERO_BI = BigInt.fromI32(0)
 const ONE_BI = BigInt.fromI32(1)
 
-  export function handleLogDeposit(event: LogDeposit): void {
-    const deposit = new Deposit(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
-    deposit.token = event.params.token
-    deposit.user = event.params.user
-    deposit.amount = event.params.amount
-    deposit.balance = event.params.balance
-    deposit.save()
+export function handleLogDeposit(event: LogDeposit): void {
+  const deposit = new Deposit(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+  deposit.token = event.params.token
+  deposit.user = event.params.user
+  deposit.amount = event.params.amount
+  deposit.balance = event.params.balance
+  deposit.save()
 }
 
 export function handleLogItemUpdate(event: LogItemUpdate): void {
@@ -121,11 +68,10 @@ export function handleLogKill(event: LogKill): void {
   kill.timestamp = event.params.timestamp
   kill.save()
 
-    const killedActiveOffer = ActiveOffer.load(event.params.id)
-    if (killedActiveOffer != null) {
-        store.remove('ActiveOffer', killedActiveOffer.id)
-    }
-
+  const killedActiveOffer = ActiveOffer.load(event.params.id)
+  if (killedActiveOffer != null) {
+    store.remove("ActiveOffer", killedActiveOffer.id)
+  }
 }
 
 export function handleLogMake(event: LogMake): void {
@@ -140,7 +86,9 @@ export function handleLogMake(event: LogMake): void {
   make.timestamp = event.params.timestamp
   make.offerType = event.params.offerType
 
-  const activeOffer = new ActiveOffer(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+  const activeOffer = new ActiveOffer(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
   activeOffer.offerID = event.params.id
   activeOffer.pair = event.params.pair
   activeOffer.maker = event.params.maker
@@ -208,8 +156,8 @@ export function handleLogTake(event: LogTake): void {
 
   const takenActiveOffer = ActiveOffer.load(event.params.id)
   if (takenActiveOffer != null) {
-    takenActiveOffer.payAmt = (takenActiveOffer.payAmt).minus(take.takeAmt)
-    takenActiveOffer.buyAmt = (takenActiveOffer.buyAmt).minus(take.giveAmt)
+    takenActiveOffer.payAmt = takenActiveOffer.payAmt.minus(take.takeAmt)
+    takenActiveOffer.buyAmt = takenActiveOffer.buyAmt.minus(take.giveAmt)
   }
 }
 
@@ -222,36 +170,33 @@ export function handleLogTrade(event: LogTrade): void {
   trade.timestamp = event.params.timestamp
   trade.save()
 
-  const ratioPayOverBuy = ((trade.payAmt).toBigDecimal()).div((trade.buyAmt).toBigDecimal())
-  const ratioBuyOverPay = ((trade.buyAmt).toBigDecimal()).div((trade.payAmt).toBigDecimal())
+  const ratioPayOverBuy = trade.payAmt.toBigDecimal().div(trade.buyAmt.toBigDecimal())
+  const ratioBuyOverPay = trade.buyAmt.toBigDecimal().div(trade.payAmt.toBigDecimal())
 
   const timeDataIdBase = event.params.payGem.toHex() + "-" + event.params.buyGem.toHex()
 
   const hourInSeconds = BigInt.fromI32(3600)
-  const hourIndex = (trade.timestamp).div(hourInSeconds) // get unique hour within unix history
+  const hourIndex = trade.timestamp.div(hourInSeconds) // get unique hour within unix history
   const hourStartUnix = hourIndex.times(hourInSeconds) // want the rounded effect
   const hourPairID = timeDataIdBase + "-" + hourIndex.toString()
 
   const dayInSeconds = BigInt.fromI32(86400)
-  const dayIndex = (trade.timestamp).div(dayInSeconds)
+  const dayIndex = trade.timestamp.div(dayInSeconds)
   const dayStartUnix = dayIndex.times(dayInSeconds)
   const dayPairID = timeDataIdBase + "-" + dayIndex.toString()
 
-  const timeDataTypes: string[] = [
-    "hour",
-    "day"
-  ]
+  const timeDataTypes: string[] = ["hour", "day"]
 
-  for(let i = 0; i < timeDataTypes.length; i++){
+  for (let i = 0; i < timeDataTypes.length; i++) {
     updateTimeData(
-        timeDataTypes[i],
-        ratioPayOverBuy,
-        ratioBuyOverPay,
-        trade,
-        hourPairID,
-        hourStartUnix,
-        dayPairID,
-        dayStartUnix
+      timeDataTypes[i],
+      ratioPayOverBuy,
+      ratioBuyOverPay,
+      trade,
+      hourPairID,
+      hourStartUnix,
+      dayPairID,
+      dayStartUnix
     )
   }
 }
@@ -266,18 +211,22 @@ export function handleLogWithdraw(event: LogWithdraw): void {
 }
 
 export function handleLogOrderFilled(event: LogOrderFilled): void {
-  const orderFilled = new OrderFilled(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+  const orderFilled = new OrderFilled(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
   orderFilled.offerID = event.params.id
   orderFilled.save()
 
   const cancelledActiveOffer = ActiveOffer.load(event.params.id)
   if (cancelledActiveOffer != null) {
-    store.remove('ActiveOffer', cancelledActiveOffer.id)
+    store.remove("ActiveOffer", cancelledActiveOffer.id)
   }
 }
 
 export function handleLogOrderStatus(event: LogOrderStatus): void {
-  const orderStatus = new OrderStatus(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+  const orderStatus = new OrderStatus(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
   orderStatus.offerID = event.params.id
   orderStatus.pair = event.params.pair
   orderStatus.payGem = event.params.payGem
@@ -293,67 +242,66 @@ export function handleLogOrderStatus(event: LogOrderStatus): void {
 }
 
 function updateTimeData(
-    timeDataKey: string,
-    ratioPayOverBuy: BigDecimal,
-    ratioBuyOverPay: BigDecimal,
-    trade: Trade,
-    hourPairID: string,
-    hourStartUnix: BigInt,
-    dayPairID: string,
-    dayStartUnix: BigInt
+  timeDataKey: string,
+  ratioPayOverBuy: BigDecimal,
+  ratioBuyOverPay: BigDecimal,
+  trade: Trade,
+  hourPairID: string,
+  hourStartUnix: BigInt,
+  dayPairID: string,
+  dayStartUnix: BigInt
 ): void {
-    let timeDataValue: PairHourData | PairDayData
+  let timeDataValue: PairHourData | PairDayData
 
+  if (timeDataKey === "hour") {
+    timeDataValue = PairHourData.load(hourPairID)
+  } else if (timeDataKey === "day") {
+    timeDataValue = PairDayData.load(dayPairID)
+  }
+
+  if (timeDataValue === null) {
     if (timeDataKey === "hour") {
-        timeDataValue = PairHourData.load(hourPairID)
+      timeDataValue = new PairHourData(hourPairID)
+      timeDataValue.startUnix = hourStartUnix
     } else if (timeDataKey === "day") {
-        timeDataValue = PairDayData.load(dayPairID)
+      timeDataValue = new PairDayData(dayPairID)
+      timeDataValue.startUnix = dayStartUnix
     }
 
-    if (timeDataValue === null) {
-        if (timeDataKey === "hour") {
-            timeDataValue = new PairHourData(hourPairID)
-            timeDataValue.startUnix = hourStartUnix
-        } else if (timeDataKey === "day") {
-            timeDataValue = new PairDayData(dayPairID)
-            timeDataValue.startUnix = dayStartUnix
-        }
+    timeDataValue.payGem = trade.payGem
+    timeDataValue.buyGem = trade.buyGem
+    timeDataValue.payAmt = trade.payAmt
+    timeDataValue.buyAmt = trade.buyAmt
+    timeDataValue.minPayOverBuy = ratioPayOverBuy
+    timeDataValue.minBuyOverPay = ratioBuyOverPay
+    timeDataValue.maxPayOverBuy = ratioPayOverBuy
+    timeDataValue.maxBuyOverPay = ratioBuyOverPay
+    timeDataValue.openPayOverBuy = ratioPayOverBuy
+    timeDataValue.openBuyOverPay = ratioBuyOverPay
+    timeDataValue.closePayOverBuy = ratioPayOverBuy
+    timeDataValue.closeBuyOverPay = ratioBuyOverPay
+    timeDataValue.tradeCount = ONE_BI
+  } else {
+    timeDataValue.payAmt = timeDataValue.payAmt.plus(trade.payAmt)
+    timeDataValue.buyAmt = timeDataValue.buyAmt.plus(trade.buyAmt)
 
-        timeDataValue.payGem = trade.payGem
-        timeDataValue.buyGem = trade.buyGem
-        timeDataValue.payAmt = trade.payAmt
-        timeDataValue.buyAmt = trade.buyAmt
-        timeDataValue.minPayOverBuy = ratioPayOverBuy
-        timeDataValue.minBuyOverPay = ratioBuyOverPay
-        timeDataValue.maxPayOverBuy = ratioPayOverBuy
-        timeDataValue.maxBuyOverPay = ratioBuyOverPay
-        timeDataValue.openPayOverBuy = ratioPayOverBuy
-        timeDataValue.openBuyOverPay = ratioBuyOverPay
-        timeDataValue.closePayOverBuy = ratioPayOverBuy
-        timeDataValue.closeBuyOverPay = ratioBuyOverPay
-        timeDataValue.tradeCount = ONE_BI
+    if (ratioPayOverBuy.lt(timeDataValue.minPayOverBuy)) {
+      timeDataValue.minPayOverBuy = ratioPayOverBuy
     }
-    else {
-        timeDataValue.payAmt = (timeDataValue.payAmt).plus(trade.payAmt)
-        timeDataValue.buyAmt = (timeDataValue.buyAmt).plus(trade.buyAmt)
-
-        if (ratioPayOverBuy.lt(timeDataValue.minPayOverBuy)) {
-            timeDataValue.minPayOverBuy = ratioPayOverBuy
-        }
-        if (ratioPayOverBuy.gt(timeDataValue.maxPayOverBuy)) {
-            timeDataValue.maxPayOverBuy = ratioPayOverBuy
-        }
-        if (ratioBuyOverPay.lt(timeDataValue.minBuyOverPay)) {
-            timeDataValue.minBuyOverPay = ratioBuyOverPay
-        }
-        if (ratioBuyOverPay.gt(timeDataValue.maxBuyOverPay)) {
-            timeDataValue.maxBuyOverPay = ratioBuyOverPay
-        }
-
-        timeDataValue.closePayOverBuy = ratioPayOverBuy
-        timeDataValue.closeBuyOverPay = ratioBuyOverPay
-        timeDataValue.tradeCount = (timeDataValue.tradeCount).plus(ONE_BI)
+    if (ratioPayOverBuy.gt(timeDataValue.maxPayOverBuy)) {
+      timeDataValue.maxPayOverBuy = ratioPayOverBuy
+    }
+    if (ratioBuyOverPay.lt(timeDataValue.minBuyOverPay)) {
+      timeDataValue.minBuyOverPay = ratioBuyOverPay
+    }
+    if (ratioBuyOverPay.gt(timeDataValue.maxBuyOverPay)) {
+      timeDataValue.maxBuyOverPay = ratioBuyOverPay
     }
 
-    timeDataValue.save()
+    timeDataValue.closePayOverBuy = ratioPayOverBuy
+    timeDataValue.closeBuyOverPay = ratioBuyOverPay
+    timeDataValue.tradeCount = timeDataValue.tradeCount.plus(ONE_BI)
+  }
+
+  timeDataValue.save()
 }
