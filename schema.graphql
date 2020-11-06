@@ -5,10 +5,12 @@ type Deposit @entity {
   amount: BigInt!
   balance: BigInt!
 }
+
 type ItemUpdate @entity {
   id: ID!
   offerItemID: BigInt!
 }
+
 type Kill @entity {
   id: ID!
   offerID: BigInt!
@@ -20,6 +22,7 @@ type Kill @entity {
   buyAmt: BigInt!
   timestamp: BigInt!
 }
+
 type Make @entity {
   id: ID!
   offerID: BigInt!
@@ -32,29 +35,35 @@ type Make @entity {
   timestamp: BigInt!
   offerType: Int!
 }
+
 type MinSell @entity {
   id: ID!
   payGem: Bytes!
   minAmount: BigInt!
   caller: Bytes!
 }
+
 type OfferType @entity {
   id: ID!
   offerType: Int!
   state: Boolean!
 }
+
 type SetAuthority @entity {
   id: ID!
   authority: Bytes!
 }
+
 type SetOwner @entity {
   id: ID!
   owner: Bytes!
 }
+
 type SortedOffer @entity {
   id: ID!
   offerID: BigInt!
 }
+
 type Take @entity {
   id: ID!
   offerID: BigInt!
@@ -68,6 +77,7 @@ type Take @entity {
   timestamp: BigInt!
   offerType: Int!
 }
+
 type Trade @entity {
   id: ID!
   payAmt: BigInt!
@@ -76,6 +86,7 @@ type Trade @entity {
   buyGem: Bytes!
   timestamp: BigInt!
 }
+
 type Withdraw @entity {
   id: ID!
   token: Bytes!
@@ -83,6 +94,7 @@ type Withdraw @entity {
   amount: BigInt!
   balance: BigInt!
 }
+
 type OrderStatus @entity {
   id: ID!
   pair: Bytes!
@@ -98,6 +110,7 @@ type OrderStatus @entity {
   cancelled: Boolean!
   filled: Boolean!
 }
+
 type OrderFilled @entity {
   id: ID!
   offerID: BigInt!
@@ -117,37 +130,37 @@ type ActiveOffer @entity {
 }
 
 type PairHourData @entity {
-    id: ID!
-    startUnix: BigInt! # unix timestamp for start of hour
-    payGem: Bytes!
-    buyGem: Bytes!
-    payAmt: BigInt!
-    buyAmt: BigInt!
-    minPayOverBuy: BigDecimal!
-    minBuyOverPay: BigDecimal!
-    maxPayOverBuy: BigDecimal!
-    maxBuyOverPay: BigDecimal!
-    openPayOverBuy: BigDecimal!
-    openBuyOverPay: BigDecimal!
-    closePayOverBuy: BigDecimal!
-    closeBuyOverPay: BigDecimal!
-    tradeCount: BigInt!
+  id: ID!
+  startUnix: BigInt! # unix timestamp for start of hour
+  payGem: Bytes!
+  buyGem: Bytes!
+  payAmt: BigInt!
+  buyAmt: BigInt!
+  minPayOverBuy: BigDecimal!
+  minBuyOverPay: BigDecimal!
+  maxPayOverBuy: BigDecimal!
+  maxBuyOverPay: BigDecimal!
+  openPayOverBuy: BigDecimal!
+  openBuyOverPay: BigDecimal!
+  closePayOverBuy: BigDecimal!
+  closeBuyOverPay: BigDecimal!
+  tradeCount: BigInt!
 }
 
 type PairDayData @entity {
-    id: ID!
-    startUnix: BigInt!
-    payGem: Bytes!
-    buyGem: Bytes!
-    payAmt: BigInt!
-    buyAmt: BigInt!
-    minPayOverBuy: BigDecimal!
-    minBuyOverPay: BigDecimal!
-    maxPayOverBuy: BigDecimal!
-    maxBuyOverPay: BigDecimal!
-    openPayOverBuy: BigDecimal!
-    openBuyOverPay: BigDecimal!
-    closePayOverBuy: BigDecimal!
-    closeBuyOverPay: BigDecimal!
-    tradeCount: BigInt!
+  id: ID!
+  startUnix: BigInt!
+  payGem: Bytes!
+  buyGem: Bytes!
+  payAmt: BigInt!
+  buyAmt: BigInt!
+  minPayOverBuy: BigDecimal!
+  minBuyOverPay: BigDecimal!
+  maxPayOverBuy: BigDecimal!
+  maxBuyOverPay: BigDecimal!
+  openPayOverBuy: BigDecimal!
+  openBuyOverPay: BigDecimal!
+  closePayOverBuy: BigDecimal!
+  closeBuyOverPay: BigDecimal!
+  tradeCount: BigInt!
 }
