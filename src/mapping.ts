@@ -67,7 +67,7 @@ export function handleLogKill(event: LogKill): void {
   kill.timestamp = event.params.timestamp
   kill.save()
 
-  const killedActiveOffer = ActiveOffer.load(event.params.id)
+  const killedActiveOffer = ActiveOffer.load(event.params.id.toString())
   if (killedActiveOffer != null) {
     store.remove("ActiveOffer", killedActiveOffer.id)
   }
@@ -85,9 +85,12 @@ export function handleLogMake(event: LogMake): void {
   make.timestamp = event.params.timestamp
   make.offerType = event.params.offerType
 
-  const activeOffer = new ActiveOffer(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  )
+  make.save()
+
+  // ActiveOffer is special, in the way that
+  // offerID (integer) == TheGraph ID (string)
+  // note that offerID is unique in smart contract
+  const activeOffer = new ActiveOffer(event.params.id.toString())
   activeOffer.offerID = event.params.id
   activeOffer.pair = event.params.pair
   activeOffer.maker = event.params.maker
@@ -98,7 +101,6 @@ export function handleLogMake(event: LogMake): void {
   activeOffer.timestamp = event.params.timestamp
   activeOffer.offerType = event.params.offerType
 
-  make.save()
   activeOffer.save()
 }
 
@@ -153,7 +155,7 @@ export function handleLogTake(event: LogTake): void {
   take.offerType = event.params.offerType
   take.save()
 
-  const takenActiveOffer = ActiveOffer.load(event.params.id)
+  const takenActiveOffer = ActiveOffer.load(event.params.id.toString())
   if (takenActiveOffer != null) {
     takenActiveOffer.payAmt = takenActiveOffer.payAmt.minus(take.takeAmt)
     takenActiveOffer.buyAmt = takenActiveOffer.buyAmt.minus(take.giveAmt)
@@ -218,9 +220,9 @@ export function handleLogOrderFilled(event: LogOrderFilled): void {
   orderFilled.offerID = event.params.id
   orderFilled.save()
 
-  const cancelledActiveOffer = ActiveOffer.load(event.params.id)
-  if (cancelledActiveOffer != null) {
-    store.remove("ActiveOffer", cancelledActiveOffer.id)
+  const filledActiveOffer = ActiveOffer.load(event.params.id.toString())
+  if (filledActiveOffer != null) {
+    store.remove("ActiveOffer", filledActiveOffer.id)
   }
 }
 
@@ -252,7 +254,7 @@ function updateTimeData(
   dayPairID: string,
   dayStartUnix: BigInt
 ): void {
-  let timeDataValue: PairTimeData
+  let timeDataValue: PairTimeData | null
 
   if (timeDataKey === "hour") {
     timeDataValue = PairTimeData.load(hourPairID)
