@@ -31,8 +31,7 @@ import {
   OrderFilled,
   OrderStatus,
   ActiveOffer,
-  PairHourData,
-  PairDayData,
+  PairTimeData,
 } from "../generated/schema"
 
 import { store, BigInt, BigDecimal } from "@graphprotocol/graph-ts"
@@ -170,6 +169,10 @@ export function handleLogTrade(event: LogTrade): void {
   trade.timestamp = event.params.timestamp
   trade.save()
 
+  const hourStr = "hour"
+  const dayStr = "day"
+  const timeDataTypes: string[] = ["hour", "day"]
+
   const ratioPayOverBuy = trade.payAmt.toBigDecimal().div(trade.buyAmt.toBigDecimal())
   const ratioBuyOverPay = trade.buyAmt.toBigDecimal().div(trade.payAmt.toBigDecimal())
 
@@ -178,14 +181,12 @@ export function handleLogTrade(event: LogTrade): void {
   const hourInSeconds = BigInt.fromI32(3600)
   const hourIndex = trade.timestamp.div(hourInSeconds) // get unique hour within unix history
   const hourStartUnix = hourIndex.times(hourInSeconds) // want the rounded effect
-  const hourPairID = timeDataIdBase + "-" + hourIndex.toString()
+  const hourPairID = timeDataIdBase + "-" + hourStr + "-" + hourIndex.toString()
 
   const dayInSeconds = BigInt.fromI32(86400)
   const dayIndex = trade.timestamp.div(dayInSeconds)
   const dayStartUnix = dayIndex.times(dayInSeconds)
-  const dayPairID = timeDataIdBase + "-" + dayIndex.toString()
-
-  const timeDataTypes: string[] = ["hour", "day"]
+  const dayPairID = timeDataIdBase + "-" + dayStr + "-" + dayIndex.toString()
 
   for (let i = 0; i < timeDataTypes.length; i++) {
     updateTimeData(
@@ -251,20 +252,20 @@ function updateTimeData(
   dayPairID: string,
   dayStartUnix: BigInt
 ): void {
-  let timeDataValue: PairHourData | PairDayData
+  let timeDataValue: PairTimeData
 
   if (timeDataKey === "hour") {
-    timeDataValue = PairHourData.load(hourPairID)
+    timeDataValue = PairTimeData.load(hourPairID)
   } else if (timeDataKey === "day") {
-    timeDataValue = PairDayData.load(dayPairID)
+    timeDataValue = PairTimeData.load(dayPairID)
   }
 
   if (timeDataValue === null) {
     if (timeDataKey === "hour") {
-      timeDataValue = new PairHourData(hourPairID)
+      timeDataValue = new PairTimeData(hourPairID)
       timeDataValue.startUnix = hourStartUnix
     } else if (timeDataKey === "day") {
-      timeDataValue = new PairDayData(dayPairID)
+      timeDataValue = new PairTimeData(dayPairID)
       timeDataValue.startUnix = dayStartUnix
     }
 

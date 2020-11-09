@@ -129,26 +129,9 @@ type ActiveOffer @entity {
   offerType: Int!
 }
 
-type PairHourData @entity {
+type PairTimeData @entity {
   id: ID!
-  startUnix: BigInt! # unix timestamp for start of hour
-  payGem: Bytes!
-  buyGem: Bytes!
-  payAmt: BigInt!
-  buyAmt: BigInt!
-  minPayOverBuy: BigDecimal!
-  minBuyOverPay: BigDecimal!
-  maxPayOverBuy: BigDecimal!
-  maxBuyOverPay: BigDecimal!
-  openPayOverBuy: BigDecimal!
-  openBuyOverPay: BigDecimal!
-  closePayOverBuy: BigDecimal!
-  closeBuyOverPay: BigDecimal!
-  tradeCount: BigInt!
-}
-
-type PairDayData @entity {
-  id: ID!
+  timeDataType: String!
   startUnix: BigInt!
   payGem: Bytes!
   buyGem: Bytes!
