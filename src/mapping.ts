@@ -12,7 +12,6 @@ import {
   LogTrade,
   LogWithdraw,
   LogOrderFilled,
-  LogOrderStatus,
 } from "../generated/Contract/Contract"
 
 import {
@@ -29,7 +28,6 @@ import {
   Trade,
   Withdraw,
   OrderFilled,
-  OrderStatus,
   ActiveOffer,
   PairTimeData,
 } from "../generated/schema"
@@ -224,24 +222,6 @@ export function handleLogOrderFilled(event: LogOrderFilled): void {
   if (filledActiveOffer != null) {
     store.remove("ActiveOffer", filledActiveOffer.id)
   }
-}
-
-export function handleLogOrderStatus(event: LogOrderStatus): void {
-  const orderStatus = new OrderStatus(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  )
-  orderStatus.offerID = event.params.id
-  orderStatus.pair = event.params.pair
-  orderStatus.payGem = event.params.payGem
-  orderStatus.payAmt = event.params.payAmt
-  orderStatus.filledPayAmt = event.params.filledPayAmt
-  orderStatus.buyGem = event.params.buyGem
-  orderStatus.buyAmt = event.params.buyAmt
-  orderStatus.filledBuyAmt = event.params.filledBuyAmt
-  orderStatus.owner = event.params.owner
-  orderStatus.timestamp = event.params.timestamp
-  orderStatus.cancelled = event.params.cancelled
-  orderStatus.filled = event.params.filled
 }
 
 function updateTimeData(

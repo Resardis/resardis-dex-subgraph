@@ -21,7 +21,6 @@ dataSources:
         - LogMinSell
         - LogOfferType
         - LogOrderFilled
-        - LogOrderStatus
         - LogSetAuthority
         - LogSetOwner
         - LogSortedOffer
@@ -46,8 +45,6 @@ dataSources:
           handler: handleLogOfferType
         - event: LogOrderFilled(indexed uint256)
           handler: handleLogOrderFilled
-        - event: LogOrderStatus(indexed uint256,indexed bytes32,address,uint256,uint256,address,uint256,uint256,indexed address,uint64,bool,bool)
-          handler: handleLogOrderStatus
         - event: LogSetAuthority(indexed address)
           handler: handleLogSetAuthority
         - event: LogSetOwner(indexed address)
