@@ -251,6 +251,8 @@ function updateTimeData(
       timeDataValue.startUnix = dayStartUnix
     }
 
+    timeDataValue.timeDataType = timeDataKey
+
     timeDataValue.payGem = trade.payGem
     timeDataValue.buyGem = trade.buyGem
     timeDataValue.payAmt = trade.payAmt
