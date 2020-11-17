@@ -1,13 +1,13 @@
 {
-  "name": "mumbai",
+  "name": "resardis-dex-subgraph",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ resardis/mumbai",
-    "create-local": "graph create --node http://localhost:8020/ resardis/mumbai",
-    "remove-local": "graph remove --node http://localhost:8020/ resardis/mumbai",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 resardis/mumbai",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ resardis/dex-mumbai",
+    "create-local": "graph create --node http://localhost:8020/ resardis/dex-mumbai",
+    "remove-local": "graph remove --node http://localhost:8020/ resardis/dex-mumbai",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 resardis/dex-mumbai",
     "lint:ts": "prettier --check '**/*.[jt]s'; eslint .",
     "lint:ts:fix": "prettier --write '**/*.[jt]s'; eslint . --fix",
     "lint:graphql": "prettier --check '**/*.graphql'",
